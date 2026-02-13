@@ -1,0 +1,2 @@
+/usr/bin/ar qc libllm_server.a CMakeFiles/llm_server.dir/llm_server.cpp.o
+/usr/bin/ranlib libllm_server.a

@@ -13,7 +13,7 @@ use eframe::egui;
 
 #[cfg(not(target_os = "macos"))]
 fn main() {
-    eprintln!("model-manager 仅支持 macOS");
+    eprintln!("MoFA IME 设置器仅支持 macOS");
 }
 
 #[cfg(target_os = "macos")]
@@ -24,7 +24,7 @@ fn main() -> Result<()> {
     };
 
     eframe::run_native(
-        "设置",
+        "MoFA IME",
         options,
         Box::new(|cc| {
             setup_cjk_font(&cc.egui_ctx);

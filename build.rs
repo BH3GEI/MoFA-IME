@@ -7,13 +7,13 @@ use std::os::unix::fs as unix_fs;
 
 fn main() {
     let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
-    let demo_cpp = manifest_dir.join("../demo-app/cpp");
+    let demo_cpp = manifest_dir.join("third_party/mofa-input/cpp");
     let local_cpp = manifest_dir.join("cpp");
 
     println!("cargo:rerun-if-changed=build.rs");
 
     if !demo_cpp.exists() {
-        panic!("demo-app/cpp 不存在: {}", demo_cpp.display());
+        panic!("third_party/mofa-input/cpp 不存在: {}", demo_cpp.display());
     }
 
     ensure_dir_link(&local_cpp, &demo_cpp);
@@ -41,8 +41,16 @@ fn main() {
 }
 
 fn ensure_dir_link(link: &Path, target: &Path) {
-    if link.exists() {
-        return;
+    if let Ok(meta) = fs::symlink_metadata(link) {
+        if link.exists() {
+            return;
+        }
+        // Broken symlink, remove and recreate.
+        if meta.file_type().is_symlink() {
+            let _ = fs::remove_file(link);
+        } else {
+            let _ = fs::remove_dir_all(link);
+        }
     }
 
     #[cfg(target_family = "unix")]
@@ -63,8 +71,16 @@ fn ensure_dir_link(link: &Path, target: &Path) {
 }
 
 fn ensure_file_link(link: &Path, target: &Path) {
-    if link.exists() {
-        return;
+    if let Ok(meta) = fs::symlink_metadata(link) {
+        if link.exists() {
+            return;
+        }
+        // Broken symlink, remove and recreate.
+        if meta.file_type().is_symlink() {
+            let _ = fs::remove_file(link);
+        } else {
+            let _ = fs::remove_file(link);
+        }
     }
 
     #[cfg(target_family = "unix")]

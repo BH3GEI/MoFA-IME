@@ -1,1 +1,1 @@
-/Users/yao/Desktop/code/work/mofa-org/mofa-input/mofa-macos-ime/../demo-app/cpp
+/Users/yao/Desktop/code/work/mofa-org/mofa-input/mofa-macos-ime/third_party/mofa-input/cpp

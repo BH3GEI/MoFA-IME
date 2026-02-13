@@ -346,7 +346,7 @@ unsafe fn install_status_item(app: id) -> Result<(StatusHandle, MonitorHandle, i
 
     let settings_item = NSMenuItem::alloc(nil)
         .initWithTitle_action_keyEquivalent_(
-            ns_string("设置..."),
+            ns_string("MoFA IME 设置..."),
             sel!(openModelManager:),
             ns_string("s"),
         )

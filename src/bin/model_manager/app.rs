@@ -276,7 +276,7 @@ impl eframe::App for ModelManagerApp {
         let asr = asr_entries();
 
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("设置");
+            ui.heading("MoFA IME 设置");
             ui.small("主程序模型目录: ~/.mofa/models");
             ui.add_space(8.0);
 

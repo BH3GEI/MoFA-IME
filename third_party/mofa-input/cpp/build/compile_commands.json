@@ -1,0 +1,152 @@
+[
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/cc -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu11 -arch arm64 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wdouble-promotion -o CMakeFiles/ggml-base.dir/ggml.c.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml.c",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml.c",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/cc -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu11 -arch arm64 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wdouble-promotion -o CMakeFiles/ggml-base.dir/ggml-alloc.c.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-alloc.c",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-alloc.c",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/ggml-base.dir/ggml-backend.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-backend.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-backend.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/ggml-base.dir/ggml-opt.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-opt.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-opt.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/ggml-base.dir/ggml-threading.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-threading.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-threading.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/cc -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu11 -arch arm64 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wdouble-promotion -o CMakeFiles/ggml-base.dir/ggml-quants.c.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-quants.c",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-quants.c",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/cc -DACCELERATE_LAPACK_ILP64 -DACCELERATE_NEW_LAPACK -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_ACCELERATE -DGGML_USE_CPU_AARCH64 -DGGML_USE_LLAMAFILE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu11 -arch arm64 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wdouble-promotion -mcpu=native+dotprod+i8mm+nosve -o CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu.c",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu.c",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DACCELERATE_LAPACK_ILP64 -DACCELERATE_NEW_LAPACK -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_ACCELERATE -DGGML_USE_CPU_AARCH64 -DGGML_USE_LLAMAFILE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -mcpu=native+dotprod+i8mm+nosve -o CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DACCELERATE_LAPACK_ILP64 -DACCELERATE_NEW_LAPACK -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_ACCELERATE -DGGML_USE_CPU_AARCH64 -DGGML_USE_LLAMAFILE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -mcpu=native+dotprod+i8mm+nosve -o CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-aarch64.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-aarch64.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DACCELERATE_LAPACK_ILP64 -DACCELERATE_NEW_LAPACK -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_ACCELERATE -DGGML_USE_CPU_AARCH64 -DGGML_USE_LLAMAFILE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -mcpu=native+dotprod+i8mm+nosve -o CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-hbm.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu-hbm.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu-hbm.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-hbm.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/cc -DACCELERATE_LAPACK_ILP64 -DACCELERATE_NEW_LAPACK -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_ACCELERATE -DGGML_USE_CPU_AARCH64 -DGGML_USE_LLAMAFILE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu11 -arch arm64 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wdouble-promotion -mcpu=native+dotprod+i8mm+nosve -o CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-quants.c.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu-quants.c",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu-quants.c",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-quants.c.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DACCELERATE_LAPACK_ILP64 -DACCELERATE_NEW_LAPACK -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_ACCELERATE -DGGML_USE_CPU_AARCH64 -DGGML_USE_LLAMAFILE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -mcpu=native+dotprod+i8mm+nosve -o CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-traits.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-traits.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DACCELERATE_LAPACK_ILP64 -DACCELERATE_NEW_LAPACK -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_ACCELERATE -DGGML_USE_CPU_AARCH64 -DGGML_USE_LLAMAFILE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -mcpu=native+dotprod+i8mm+nosve -o CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/amx/amx.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/amx/amx.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DACCELERATE_LAPACK_ILP64 -DACCELERATE_NEW_LAPACK -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_ACCELERATE -DGGML_USE_CPU_AARCH64 -DGGML_USE_LLAMAFILE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -mcpu=native+dotprod+i8mm+nosve -o CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/amx/mmq.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/amx/mmq.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DACCELERATE_LAPACK_ILP64 -DACCELERATE_NEW_LAPACK -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_ACCELERATE -DGGML_USE_CPU_AARCH64 -DGGML_USE_LLAMAFILE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -mcpu=native+dotprod+i8mm+nosve -o CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/llamafile/sgemm.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-cpu/llamafile/sgemm.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src",
+  "command": "/usr/bin/c++ -DGGML_BACKEND_SHARED -DGGML_BUILD -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_BLAS -DGGML_USE_CPU -DGGML_USE_METAL -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/ggml.dir/ggml-backend-reg.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-backend-reg.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-backend-reg.cpp",
+  "output": "llama.cpp/ggml/src/CMakeFiles/ggml.dir/ggml-backend-reg.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src/ggml-blas",
+  "command": "/usr/bin/c++ -DACCELERATE_LAPACK_ILP64 -DACCELERATE_NEW_LAPACK -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_BLAS_USE_ACCELERATE -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_blas_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-blas/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/ggml-blas.dir/ggml-blas.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-blas/ggml-blas.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-blas/ggml-blas.cpp",
+  "output": "llama.cpp/ggml/src/ggml-blas/CMakeFiles/ggml-blas.dir/ggml-blas.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src/ggml-metal",
+  "command": "/usr/bin/cc -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_METAL_EMBED_LIBRARY -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_metal_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-metal/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -O3 -DNDEBUG -std=gnu11 -arch arm64 -fPIC -Wshadow -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes -Werror=implicit-int -Werror=implicit-function-declaration -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wdouble-promotion -o CMakeFiles/ggml-metal.dir/ggml-metal.m.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-metal/ggml-metal.m",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-metal/ggml-metal.m",
+  "output": "llama.cpp/ggml/src/ggml-metal/CMakeFiles/ggml-metal.dir/ggml-metal.m.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/ggml/src/ggml-metal",
+  "command": "/usr/bin/cc -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_METAL_EMBED_LIBRARY -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600 -Dggml_metal_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/ggml-metal/.. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Foundation.framework -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Metal.framework -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/MetalKit.framework -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -fPIC -o CMakeFiles/ggml-metal.dir/__/__/__/__/autogenerated/ggml-metal-embed.s.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/autogenerated/ggml-metal-embed.s",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/autogenerated/ggml-metal-embed.s",
+  "output": "llama.cpp/ggml/src/ggml-metal/CMakeFiles/ggml-metal.dir/__/__/__/__/autogenerated/ggml-metal-embed.s.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/src",
+  "command": "/usr/bin/c++ -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_BLAS -DGGML_USE_CPU -DGGML_USE_METAL -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/../include -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/llama.dir/llama.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/llama.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/llama.cpp",
+  "output": "llama.cpp/src/CMakeFiles/llama.dir/llama.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/src",
+  "command": "/usr/bin/c++ -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_BLAS -DGGML_USE_CPU -DGGML_USE_METAL -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/../include -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/llama.dir/llama-vocab.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/llama-vocab.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/llama-vocab.cpp",
+  "output": "llama.cpp/src/CMakeFiles/llama.dir/llama-vocab.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/src",
+  "command": "/usr/bin/c++ -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_BLAS -DGGML_USE_CPU -DGGML_USE_METAL -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/../include -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/llama.dir/llama-grammar.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/llama-grammar.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/llama-grammar.cpp",
+  "output": "llama.cpp/src/CMakeFiles/llama.dir/llama-grammar.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/src",
+  "command": "/usr/bin/c++ -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_BLAS -DGGML_USE_CPU -DGGML_USE_METAL -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/../include -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/llama.dir/llama-sampling.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/llama-sampling.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/llama-sampling.cpp",
+  "output": "llama.cpp/src/CMakeFiles/llama.dir/llama-sampling.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/src",
+  "command": "/usr/bin/c++ -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_BLAS -DGGML_USE_CPU -DGGML_USE_METAL -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/../include -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/llama.dir/unicode.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/unicode.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/unicode.cpp",
+  "output": "llama.cpp/src/CMakeFiles/llama.dir/unicode.cpp.o"
+},
+{
+  "directory": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/build/llama.cpp/src",
+  "command": "/usr/bin/c++ -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_BLAS -DGGML_USE_CPU -DGGML_USE_METAL -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/. -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/../include -I/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/ggml/src/../include -O3 -DNDEBUG -std=gnu++17 -arch arm64 -fPIC -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -o CMakeFiles/llama.dir/unicode-data.cpp.o -c /Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/unicode-data.cpp",
+  "file": "/Users/yao/Desktop/code/work/mofa-org/mofa-input/cpp/llama.cpp/src/unicode-data.cpp",
+  "output": "llama.cpp/src/CMakeFiles/llama.dir/unicode-data.cpp.o"
+}
+]
