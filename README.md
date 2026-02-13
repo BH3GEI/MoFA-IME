@@ -3,7 +3,7 @@
 高性能、低延迟、易配置，你的数据永远在本地。
 
 ## 介绍
-MoFA IME 是一款 macOS 常驻语音输入器：按住热（fn）说话，松开即本地转写，默认（可选关闭） LLM 润色，并自动写入当前输入框。
+MoFA IME 是一款 macOS 常驻语音输入器：按住热键（fn）说话，松开即本地转写，默认（可选关闭） LLM 润色，并自动写入当前输入框。
 
 首次使用请先打开 `MoFA IME 设置` 下载模型（至少 1 个 ASR 模型；并推荐再下载 1 个 LLM 模型）。
 
@@ -26,6 +26,10 @@ MoFA IME 是一款 macOS 常驻语音输入器：按住热（fn）说话，松�
 6. 全程以菜单栏与悬浮窗反馈状态，并持久化配置到 `~/.mofa/macos-ime.conf`，模型目录为 `~/.mofa/models`。
 
 后续计划：LLM 推理栈拟逐步迁移至 OminiX-MLX：<https://github.com/OminiX-ai/OminiX-MLX>。
+
+## 警告
+
+大家对唔住，本项目包含大量AI生成嘅代码。
 
 ## 许可证
 本项目采用 Apache License 2.0，详见 `LICENSE`。
