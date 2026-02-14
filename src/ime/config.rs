@@ -264,6 +264,7 @@ struct AppConfig {
     output_mode: OutputMode,
     llm_model: LlmModelChoice,
     asr_model: AsrModelChoice,
+    show_floating_orb: bool,
 }
 
 impl Default for AppConfig {
@@ -273,6 +274,7 @@ impl Default for AppConfig {
             output_mode: OutputMode::Llm,
             llm_model: LlmModelChoice::Auto,
             asr_model: AsrModelChoice::Auto,
+            show_floating_orb: true,
         }
     }
 }
@@ -458,6 +460,8 @@ fn load_app_config() -> AppConfig {
             if let Some(choice) = AsrModelChoice::from_token(v) {
                 cfg.asr_model = choice;
             }
+        } else if let Some(v) = line.strip_prefix("show_floating_orb=") {
+            cfg.show_floating_orb = v.trim().to_ascii_lowercase() == "true";
         }
     }
 
@@ -472,5 +476,44 @@ fn spawn_hotkey_config_watcher(store: Arc<std::sync::atomic::AtomicUsize>) {
             store.store(loaded.pack(), Ordering::SeqCst);
         }
         std::thread::sleep(Duration::from_secs(1));
+    });
+}
+
+// Global state for floating orb visibility
+static ORB_VISIBLE: OnceLock<Arc<AtomicBool>> = OnceLock::new();
+
+fn get_orb_visible() -> &'static Arc<AtomicBool> {
+    ORB_VISIBLE.get_or_init(|| Arc::new(AtomicBool::new(true)))
+}
+
+pub fn set_orb_visible(visible: bool) {
+    get_orb_visible().store(visible, Ordering::SeqCst);
+}
+
+pub fn is_orb_visible() -> bool {
+    get_orb_visible().load(Ordering::SeqCst)
+}
+
+pub fn spawn_orb_config_watcher(overlay: OverlayHandle) {
+    std::thread::spawn(move || {
+        let orb_state = get_orb_visible();
+        let mut last_visible = orb_state.load(Ordering::SeqCst);
+        loop {
+            let cfg = load_app_config();
+            let current_visible = cfg.show_floating_orb;
+            orb_state.store(current_visible, Ordering::SeqCst);
+
+            // Handle visibility change
+            if current_visible != last_visible {
+                if current_visible {
+                    overlay.show_orb();
+                } else {
+                    overlay.hide_orb();
+                }
+                last_visible = current_visible;
+            }
+
+            std::thread::sleep(Duration::from_secs(1));
+        }
     });
 }

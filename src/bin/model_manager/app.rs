@@ -308,6 +308,7 @@ impl eframe::App for ModelManagerApp {
             let old_output = self.config.output_mode;
             let old_llm = self.config.llm_model;
             let old_asr = self.config.asr_model;
+            let old_show_orb = self.config.show_floating_orb;
             let mut setting_changed = false;
             ui.horizontal(|ui| {
                 ui.label("发送内容:");
@@ -383,12 +384,21 @@ impl eframe::App for ModelManagerApp {
                     });
             });
 
+            ui.horizontal(|ui| {
+                let mut show_orb = self.config.show_floating_orb;
+                if ui.checkbox(&mut show_orb, "显示悬浮球").changed() {
+                    self.config.show_floating_orb = show_orb;
+                    setting_changed = true;
+                }
+            });
+
             if centered_button(ui, "保存运行设置").clicked() {
                 setting_changed = true;
             }
             if old_output != self.config.output_mode
                 || old_llm != self.config.llm_model
                 || old_asr != self.config.asr_model
+                || old_show_orb != self.config.show_floating_orb
             {
                 setting_changed = true;
             }

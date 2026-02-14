@@ -91,6 +91,14 @@ struct OverlayHandle {
     status_badge_ptr: usize,
     status_label_ptr: usize,
     preview_label_ptr: usize,
+    // History window
+    history_window_ptr: usize,
+    history_item1_ptr: usize,
+    history_item2_ptr: usize,
+    history_item3_ptr: usize,
+    history_close_btn_ptr: usize,
+    // Floating orb (常驻悬浮球)
+    orb_window_ptr: usize,
 }
 
 impl OverlayHandle {
@@ -207,12 +215,194 @@ impl OverlayHandle {
             }
 
             if visible {
-                position_overlay_window(window);
+                let _is_top = position_overlay_window(window);
                 let _: () = msg_send![window, setAlphaValue: 1.0f64];
                 window.orderFrontRegardless();
             } else {
                 window.orderOut_(nil);
                 let _: () = msg_send![window, setAlphaValue: 1.0f64];
+            }
+        });
+    }
+
+    fn show_history_internal(self, position_top: bool, auto_hide: bool) {
+        let history_window_ptr = self.history_window_ptr;
+        let item1_ptr = self.history_item1_ptr;
+        let item2_ptr = self.history_item2_ptr;
+        let item3_ptr = self.history_item3_ptr;
+        let _close_btn_ptr = self.history_close_btn_ptr;
+
+        // Get history items
+        let history = get_history_items();
+
+        Queue::main().exec_async(move || unsafe {
+            let window = history_window_ptr as id;
+            if window == nil {
+                return;
+            }
+
+            // Update text with real history data
+            let item1 = item1_ptr as id;
+            let item2 = item2_ptr as id;
+            let item3 = item3_ptr as id;
+
+            let text1 = history.get(0).map(|s| s.as_str()).unwrap_or("");
+            let text2 = history.get(1).map(|s| s.as_str()).unwrap_or("");
+            let text3 = history.get(2).map(|s| s.as_str()).unwrap_or("");
+
+            if item1 != nil {
+                let display = if text1.is_empty() { "（无）" } else { text1 };
+                let _: () = msg_send![item1, setStringValue: ns_string(&truncate(display, 20))];
+            }
+            if item2 != nil {
+                let display = if text2.is_empty() { "（无）" } else { text2 };
+                let _: () = msg_send![item2, setStringValue: ns_string(&truncate(display, 20))];
+            }
+            if item3 != nil {
+                let display = if text3.is_empty() { "（无）" } else { text3 };
+                let _: () = msg_send![item3, setStringValue: ns_string(&truncate(display, 20))];
+            }
+
+            // Position history window same side as main overlay
+            position_history_window(window, position_top);
+
+            let _: () = msg_send![window, setAlphaValue: 1.0f64];
+            window.orderFrontRegardless();
+
+            // Auto-hide only if enabled (for overlay-triggered history)
+            if auto_hide {
+                let window_ptr_for_timer = history_window_ptr;
+                std::thread::spawn(move || {
+                    let mut elapsed_ms = 0u64;
+                    let check_interval = Duration::from_millis(200);
+                    let timeout_ms = 8000u64;
+
+                    while elapsed_ms < timeout_ms {
+                        std::thread::sleep(check_interval);
+                        elapsed_ms += 200;
+
+                        // Check if mouse is over the window
+                        let should_hide = Queue::main().exec_sync(move || unsafe {
+                            let w = window_ptr_for_timer as id;
+                            if w == nil {
+                                return true; // Window gone, hide
+                            }
+
+                            // Get window frame
+                            let window_frame: NSRect = msg_send![w, frame];
+
+                            // Get mouse location (screen coordinates)
+                            let mouse_loc: NSPoint = msg_send![class!(NSEvent), mouseLocation];
+
+                            // Check if mouse is inside window frame
+                            let is_inside = mouse_loc.x >= window_frame.origin.x
+                                && mouse_loc.x <= window_frame.origin.x + window_frame.size.width
+                                && mouse_loc.y >= window_frame.origin.y
+                                && mouse_loc.y <= window_frame.origin.y + window_frame.size.height;
+
+                            !is_inside // Return true (should hide) if mouse is NOT inside
+                        });
+
+                        if should_hide {
+                            break;
+                        }
+                        // If mouse is inside, reset timer
+                        elapsed_ms = 0;
+                    }
+
+                    // Hide the window
+                    Queue::main().exec_async(move || unsafe {
+                        let w = window_ptr_for_timer as id;
+                        if w != nil {
+                            w.orderOut_(nil);
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    fn show_history(self, position_top: bool) {
+        // Called from orb click - don't auto hide
+        self.show_history_internal(position_top, false);
+    }
+
+    fn hide_history(self) {
+        self.hide_history_internal();
+    }
+
+    fn refresh_history_if_visible(self) {
+        let history_window_ptr = self.history_window_ptr;
+        let item1_ptr = self.history_item1_ptr;
+        let item2_ptr = self.history_item2_ptr;
+        let item3_ptr = self.history_item3_ptr;
+
+        // Get history items
+        let history = get_history_items();
+
+        Queue::main().exec_async(move || unsafe {
+            let window = history_window_ptr as id;
+            if window == nil {
+                return;
+            }
+
+            // Check if window is visible
+            let is_visible: i8 = msg_send![window, isVisible];
+            if is_visible == 0 {
+                return; // Window not visible, no need to refresh
+            }
+
+            // Update text with real history data
+            let item1 = item1_ptr as id;
+            let item2 = item2_ptr as id;
+            let item3 = item3_ptr as id;
+
+            let text1 = history.get(0).map(|s| s.as_str()).unwrap_or("");
+            let text2 = history.get(1).map(|s| s.as_str()).unwrap_or("");
+            let text3 = history.get(2).map(|s| s.as_str()).unwrap_or("");
+
+            if item1 != nil {
+                let display = if text1.is_empty() { "（无）" } else { text1 };
+                let _: () = msg_send![item1, setStringValue: ns_string(&truncate(display, 20))];
+            }
+            if item2 != nil {
+                let display = if text2.is_empty() { "（无）" } else { text2 };
+                let _: () = msg_send![item2, setStringValue: ns_string(&truncate(display, 20))];
+            }
+            if item3 != nil {
+                let display = if text3.is_empty() { "（无）" } else { text3 };
+                let _: () = msg_send![item3, setStringValue: ns_string(&truncate(display, 20))];
+            }
+        });
+    }
+
+    fn hide_history_internal(self) {
+        let history_window_ptr = self.history_window_ptr;
+        Queue::main().exec_async(move || unsafe {
+            let window = history_window_ptr as id;
+            if window != nil {
+                window.orderOut_(nil);
+                let _: () = msg_send![window, setAlphaValue: 1.0f64];
+            }
+        });
+    }
+
+    fn show_orb(self) {
+        let orb_window_ptr = self.orb_window_ptr;
+        Queue::main().exec_async(move || unsafe {
+            let window = orb_window_ptr as id;
+            if window != nil {
+                window.orderFrontRegardless();
+            }
+        });
+    }
+
+    fn hide_orb(self) {
+        let orb_window_ptr = self.orb_window_ptr;
+        Queue::main().exec_async(move || unsafe {
+            let window = orb_window_ptr as id;
+            if window != nil {
+                window.orderOut_(nil);
             }
         });
     }
@@ -232,6 +422,16 @@ fn truncate_middle(s: &str, max_chars: usize) -> String {
     out.extend(chars[..head].iter());
     out.push('…');
     out.extend(chars[chars.len() - tail..].iter());
+    out
+}
+
+fn truncate(s: &str, max_chars: usize) -> String {
+    let chars: Vec<char> = s.chars().collect();
+    if chars.len() <= max_chars {
+        return s.to_string();
+    }
+    let mut out: String = chars.into_iter().take(max_chars - 1).collect();
+    out.push('…');
     out
 }
 

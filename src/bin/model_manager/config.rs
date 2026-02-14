@@ -232,6 +232,7 @@ struct AppConfig {
     output_mode: OutputModeCfg,
     llm_model: LlmChoice,
     asr_model: AsrChoice,
+    show_floating_orb: bool,
 }
 
 impl Default for AppConfig {
@@ -241,6 +242,7 @@ impl Default for AppConfig {
             output_mode: OutputModeCfg::Llm,
             llm_model: LlmChoice::Auto,
             asr_model: AsrChoice::Auto,
+            show_floating_orb: true,
         }
     }
 }
@@ -414,6 +416,8 @@ fn load_app_config() -> AppConfig {
             if let Some(choice) = AsrChoice::from_token(v) {
                 cfg.asr_model = choice;
             }
+        } else if let Some(v) = line.strip_prefix("show_floating_orb=") {
+            cfg.show_floating_orb = v.trim().to_ascii_lowercase() == "true";
         }
     }
 
@@ -430,11 +434,12 @@ fn save_app_config(cfg: &AppConfig) -> Result<()> {
         Ok(content) => content.lines().map(|line| line.to_string()).collect(),
         Err(_) => Vec::new(),
     };
-    let pairs = [
+    let pairs: Vec<(&str, String)> = vec![
         ("hotkey", cfg.hotkey.token()),
         ("output_mode", cfg.output_mode.token().to_string()),
         ("llm_model", cfg.llm_model.token().to_string()),
         ("asr_model", cfg.asr_model.token().to_string()),
+        ("show_floating_orb", cfg.show_floating_orb.to_string()),
     ];
 
     for (key, value) in pairs {

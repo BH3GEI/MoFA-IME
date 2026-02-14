@@ -60,6 +60,10 @@ fn spawn_pipeline_worker(
     monitor: MonitorHandle,
     overlay: OverlayHandle,
 ) {
+    // Set up orb click handler
+    let (orb_tx, orb_rx) = mpsc::channel::<OrbCommand>();
+    set_orb_click_handler(orb_tx);
+
     std::thread::spawn(move || {
         let model_base = model_base_dir();
 
@@ -86,8 +90,46 @@ fn spawn_pipeline_worker(
 
         let mut recorder: Option<ActiveRecorder> = None;
         let mut recording_ticker: Option<RecordingTicker> = None;
+        let mut history_visible = false;
 
-        while let Ok(sig) = rx.recv() {
+        loop {
+            // Check for hotkey signal (blocking with timeout)
+            let sig = match rx.recv_timeout(Duration::from_millis(100)) {
+                Ok(s) => s,
+                Err(mpsc::RecvTimeoutError::Timeout) => {
+                    // Check orb click events during timeout
+                    while let Ok(cmd) = orb_rx.try_recv() {
+                        match cmd {
+                            OrbCommand::ToggleHistory => {
+                                history_visible = !history_visible;
+                                if history_visible {
+                                    // Show history at a default position (top-right when main overlay is hidden)
+                                    overlay.show_history(false);
+                                } else {
+                                    overlay.hide_history();
+                                }
+                            }
+                        }
+                    }
+                    continue;
+                }
+                Err(mpsc::RecvTimeoutError::Disconnected) => break,
+            };
+
+            // Also check orb events before processing hotkey
+            while let Ok(cmd) = orb_rx.try_recv() {
+                match cmd {
+                    OrbCommand::ToggleHistory => {
+                        history_visible = !history_visible;
+                        if history_visible {
+                            overlay.show_history(false);
+                        } else {
+                            overlay.hide_history();
+                        }
+                    }
+                }
+            }
+
             match sig {
                 HotkeySignal::Down => {
                     if recorder.is_none() {
@@ -279,6 +321,10 @@ fn spawn_pipeline_worker(
                         overlay.fade_out_quick();
                         continue;
                     }
+
+                    // Add to history - store the actual sent text (LLM refined or ASR raw)
+                    add_history_item(&final_text, overlay);
+
                     monitor.set_hint(&format!("发送模式: {mode_text}"));
 
                     status.set(TrayState::Injected);

@@ -3,11 +3,11 @@
 use anyhow::{anyhow, bail, Context, Result};
 use cocoa::appkit::{
     NSApplication, NSApplicationActivationPolicyAccessory, NSBackingStoreBuffered, NSButton,
-    NSMainMenuWindowLevel, NSMenu, NSMenuItem, NSPasteboard, NSPasteboardTypeString, NSStatusBar,
-    NSStatusItem, NSTextField, NSVariableStatusItemLength, NSView, NSWindow,
+    NSMainMenuWindowLevel, NSMenu, NSMenuItem, NSPasteboard, NSPasteboardTypeString,
+    NSStatusBar, NSStatusItem, NSTextField, NSVariableStatusItemLength, NSView, NSWindow,
     NSWindowCollectionBehavior, NSWindowStyleMask,
 };
-use cocoa::base::{id, nil, NO, YES};
+use cocoa::base::{id, nil, BOOL, NO, YES};
 use cocoa::foundation::{NSAutoreleasePool, NSPoint, NSRect, NSSize, NSString};
 use core_foundation::base::{CFRelease, CFType, TCFType};
 use core_foundation::runloop::{kCFRunLoopCommonModes, CFRunLoop, CFRunLoopSource};
@@ -27,8 +27,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{self, Receiver, Sender};
-use std::sync::OnceLock;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, OnceLock};
 use std::time::Duration;
 
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
@@ -52,17 +51,19 @@ fn run_app() -> Result<()> {
         app.setActivationPolicy_(NSApplicationActivationPolicyAccessory);
     }
 
-    let hotkey_spec = load_app_config().hotkey;
+    let app_cfg = load_app_config();
+    let hotkey_spec = app_cfg.hotkey;
     let hotkey_store = Arc::new(std::sync::atomic::AtomicUsize::new(hotkey_spec.pack()));
     let _ = HOTKEY_STORE.set(Arc::clone(&hotkey_store));
 
     let (status_handle, monitor_handle, _status_item, _menu, _menu_handler) =
         unsafe { install_status_item(app)? };
-    let overlay_handle = unsafe { install_overlay()? };
+    let overlay_handle = unsafe { install_overlay(app_cfg.show_floating_orb)? };
 
     let (hotkey_tx, hotkey_rx) = mpsc::channel::<HotkeySignal>();
     spawn_pipeline_worker(hotkey_rx, status_handle, monitor_handle, overlay_handle);
     spawn_hotkey_config_watcher(Arc::clone(&hotkey_store));
+    spawn_orb_config_watcher(overlay_handle);
 
     let _hotkey_guard = install_hotkey_tap(hotkey_tx, hotkey_store)?;
 
