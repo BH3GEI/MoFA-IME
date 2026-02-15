@@ -266,15 +266,8 @@ fn spawn_pipeline_worker(
                         overlay.set_preview(&raw_text);
                     }
 
-                    if should_drop_transcript(&raw_text) {
-                        status.set(TrayState::Idle);
-                        monitor.set_state("空识别结果");
-                        monitor.set_hint("未识别到有效语音");
-                        overlay.show_error("未识别到有效语音");
-                        std::thread::sleep(Duration::from_millis(900));
-                        overlay.fade_out_quick();
-                        continue;
-                    }
+                    // 注：不再对ASR原文进行过滤，直接送入LLM或输出
+                    // LLM将负责过滤和润色工作
 
                     std::thread::sleep(Duration::from_millis(ASR_PREVIEW_HOLD_MS));
 
@@ -285,28 +278,21 @@ fn spawn_pipeline_worker(
                         if let Some(chat) = llm.as_ref() {
                             let prompt = build_refine_prompt(&raw_text);
                             chat.clear();
-                            let llm_out = chat.send(&prompt, 256, 0.2).unwrap_or(raw_text.clone());
+                            let llm_out = chat.send(&prompt, 384, 0.2).unwrap_or(raw_text.clone());
                             let llm_out = normalize_transcript(&llm_out);
-                            if !llm_out.is_empty() && !is_template_noise_text(&llm_out) {
+                            if !llm_out.is_empty() {
                                 final_text = llm_out;
                             } else {
+                                // LLM输出为空，回退到ASR原文
                                 mode_text = "ASR 原文";
-                                monitor.set_hint("LLM 输出无效，回退 ASR");
+                                monitor.set_hint("LLM 输出为空，回退 ASR 原文");
+                                // final_text 保持为 raw_text.clone()
                             }
                         } else {
+                            // LLM未加载，使用ASR原文
                             mode_text = "ASR 原文";
-                            monitor.set_hint("LLM 未就绪，回退 ASR");
+                            monitor.set_hint("LLM 未就绪，使用 ASR 原文");
                         }
-                    }
-
-                    if should_drop_transcript(&final_text) {
-                        status.set(TrayState::Idle);
-                        monitor.set_state("空结果");
-                        monitor.set_hint("结果被过滤");
-                        overlay.show_error("未识别到有效语音");
-                        std::thread::sleep(Duration::from_millis(760));
-                        overlay.fade_out_quick();
-                        continue;
                     }
 
                     monitor.set_output(&final_text);
