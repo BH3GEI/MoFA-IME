@@ -275,11 +275,15 @@ fn spawn_pipeline_worker(
                     let mut mode_text = app_cfg.output_mode.label();
                     if app_cfg.output_mode == OutputMode::Llm {
                         overlay.show_refining();
-                        if let Some(chat) = llm.as_ref() {
+                        if should_skip_llm_refine(&raw_text) {
+                            mode_text = "ASR 原文";
+                            monitor.set_hint("英文段落直出 ASR 原文");
+                        } else if let Some(chat) = llm.as_ref() {
                             let prompt = build_refine_prompt(&raw_text);
                             chat.clear();
-                            let llm_out = chat.send(&prompt, 384, 0.2).unwrap_or(raw_text.clone());
+                            let llm_out = chat.send(&prompt, 384, 0.1).unwrap_or(raw_text.clone());
                             let llm_out = normalize_transcript(&llm_out);
+                            let llm_out = trim_added_terminal_period(&raw_text, &llm_out);
                             if !llm_out.is_empty() {
                                 final_text = llm_out;
                             } else {

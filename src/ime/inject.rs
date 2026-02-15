@@ -3,6 +3,10 @@ fn inject_text(text: &str) -> Result<()> {
         return Ok(());
     }
 
+    if unsafe { AXIsProcessTrusted() } == 0 {
+        bail!("未授予辅助功能权限，请在 系统设置 -> 隐私与安全性 -> 辅助功能 中允许 MoFA IME");
+    }
+
     // 直接在调用线程执行，避免队列排队导致的剪贴板竞争
     // 注意：所有 UI 相关操作都已在主线程运行（通过管道事件触发）
     let _pool = unsafe { NSAutoreleasePool::new(nil) };

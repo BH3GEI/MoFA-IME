@@ -145,6 +145,40 @@ impl ModelManagerApp {
         }
     }
 
+    fn open_privacy_settings(&mut self) {
+        let urls = [
+            "x-apple.systempreferences:com.apple.preference.security?Privacy",
+            "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension",
+        ];
+
+        for url in urls {
+            match std::process::Command::new("open").arg(url).status() {
+                Ok(status) if status.success() => {
+                    self.status = "已打开系统设置".to_string();
+                    return;
+                }
+                Ok(_) => {}
+                Err(_) => {}
+            }
+        }
+
+        match std::process::Command::new("open")
+            .arg("-b")
+            .arg("com.apple.systempreferences")
+            .status()
+        {
+            Ok(status) if status.success() => {
+                self.status = "已打开系统设置".to_string();
+            }
+            Ok(_) => {
+                self.status = "打开系统设置失败".to_string();
+            }
+            Err(e) => {
+                self.status = format!("打开系统设置失败: {e}");
+            }
+        }
+    }
+
     fn delete_model(&mut self, entry: &ModelEntry) {
         let path = entry.path(&self.model_dir);
         if !path.exists() {
@@ -340,6 +374,11 @@ impl eframe::App for ModelManagerApp {
             ui.small("点“开始录制”后，直接按组合键，如 Cmd+K。");
             ui.small("支持: Cmd/Ctrl/Alt/Shift + 主键；也可用“设为 Fn”。");
             ui.small(format!("热键状态: {}", self.hotkey_status));
+            ui.label("需开输入监控/辅助功能/麦克风（系统设置 -> 隐私与安全性）；悬浮窗可按住拖动。");
+            ui.label("若按键无响应，请先开“输入监控”；若能识别但不自动粘贴，请再开“辅助功能”。");
+            if centered_button(ui, "打开系统设置").clicked() {
+                self.open_privacy_settings();
+            }
             ui.add_space(8.0);
 
             let old_output = self.config.output_mode;

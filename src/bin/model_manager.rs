@@ -19,7 +19,7 @@ fn main() {
 #[cfg(target_os = "macos")]
 fn main() -> Result<()> {
     let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default().with_inner_size([860.0, 620.0]),
+        viewport: egui::ViewportBuilder::default().with_inner_size([860.0, 800.0]),
         ..Default::default()
     };
 
