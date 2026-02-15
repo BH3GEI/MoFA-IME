@@ -44,11 +44,6 @@ impl ModelManagerApp {
         }
     }
 
-    fn reload_hotkey_setting(&mut self) {
-        self.config = load_app_config();
-        self.hotkey_status = format!("当前: {}", self.config.hotkey.label());
-    }
-
     fn start_hotkey_recording(&mut self) {
         self.hotkey_recording = true;
         self.hotkey_status = "请按下快捷键".to_string();
@@ -266,6 +261,31 @@ impl ModelManagerApp {
     }
 }
 
+fn common_hotkey_presets() -> &'static [(&'static str, HotkeySpec)] {
+    const PRESETS: [(&str, HotkeySpec); 19] = [
+        ("Alt+R", HotkeySpec { keycode: 15, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+E", HotkeySpec { keycode: 14, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+T", HotkeySpec { keycode: 17, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+W", HotkeySpec { keycode: 13, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+A", HotkeySpec { keycode: 0, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+S", HotkeySpec { keycode: 1, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+D", HotkeySpec { keycode: 2, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+F", HotkeySpec { keycode: 3, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+X", HotkeySpec { keycode: 7, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+C", HotkeySpec { keycode: 8, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+V", HotkeySpec { keycode: 9, modifiers: HOTKEY_MOD_ALT }),
+        ("Alt+Space", HotkeySpec { keycode: 49, modifiers: HOTKEY_MOD_ALT }),
+        ("Cmd+R", HotkeySpec { keycode: 15, modifiers: HOTKEY_MOD_CMD }),
+        ("Cmd+E", HotkeySpec { keycode: 14, modifiers: HOTKEY_MOD_CMD }),
+        ("Cmd+T", HotkeySpec { keycode: 17, modifiers: HOTKEY_MOD_CMD }),
+        ("Cmd+W", HotkeySpec { keycode: 13, modifiers: HOTKEY_MOD_CMD }),
+        ("Ctrl+Space", HotkeySpec { keycode: 49, modifiers: HOTKEY_MOD_CTRL }),
+        ("Shift+Space", HotkeySpec { keycode: 49, modifiers: HOTKEY_MOD_SHIFT }),
+        ("Fn", HotkeySpec { keycode: HOTKEY_FN_CODE, modifiers: 0 }),
+    ];
+    &PRESETS
+}
+
 impl eframe::App for ModelManagerApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         self.handle_events();
@@ -294,9 +314,19 @@ impl eframe::App for ModelManagerApp {
                     self.hotkey_recording = false;
                     self.save_hotkey_setting(HotkeySpec::fn_key());
                 }
-                if centered_button(ui, "重新读取").clicked() {
+
+                let mut preset_idx: i32 = -1;
+                egui::ComboBox::from_id_source("hotkey_preset_combo")
+                    .selected_text("常用快捷键")
+                    .show_ui(ui, |ui| {
+                        for (i, (label, _)) in common_hotkey_presets().iter().enumerate() {
+                            ui.selectable_value(&mut preset_idx, i as i32, *label);
+                        }
+                    });
+                if preset_idx >= 0 {
+                    let spec = common_hotkey_presets()[preset_idx as usize].1;
                     self.hotkey_recording = false;
-                    self.reload_hotkey_setting();
+                    self.save_hotkey_setting(spec);
                 }
             });
 
@@ -392,9 +422,6 @@ impl eframe::App for ModelManagerApp {
                 }
             });
 
-            if centered_button(ui, "保存运行设置").clicked() {
-                setting_changed = true;
-            }
             if old_output != self.config.output_mode
                 || old_llm != self.config.llm_model
                 || old_asr != self.config.asr_model

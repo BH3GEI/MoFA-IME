@@ -59,6 +59,7 @@ fn run_app() -> Result<()> {
     let (status_handle, monitor_handle, _status_item, _menu, _menu_handler) =
         unsafe { install_status_item(app)? };
     let overlay_handle = unsafe { install_overlay(app_cfg.show_floating_orb)? };
+    spawn_clipboard_watcher(overlay_handle);
 
     let (hotkey_tx, hotkey_rx) = mpsc::channel::<HotkeySignal>();
     spawn_pipeline_worker(hotkey_rx, status_handle, monitor_handle, overlay_handle);

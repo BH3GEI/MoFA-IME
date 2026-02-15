@@ -93,8 +93,12 @@ struct OverlayHandle {
     preview_label_ptr: usize,
     // History window
     history_window_ptr: usize,
+    history_title_ptr: usize,
+    history_tab_control_ptr: usize,
     history_scroll_view_ptr: usize,
     history_list_view_ptr: usize,
+    clipboard_scroll_view_ptr: usize,
+    clipboard_list_view_ptr: usize,
     history_close_btn_ptr: usize,
     // Floating orb (常驻悬浮球)
     orb_window_ptr: usize,
@@ -226,12 +230,18 @@ impl OverlayHandle {
 
     fn show_history_internal(self, position_top: bool, auto_hide: bool) {
         let history_window_ptr = self.history_window_ptr;
+        let history_title_ptr = self.history_title_ptr;
+        let history_tab_control_ptr = self.history_tab_control_ptr;
         let history_scroll_view_ptr = self.history_scroll_view_ptr;
         let history_list_view_ptr = self.history_list_view_ptr;
+        let clipboard_scroll_view_ptr = self.clipboard_scroll_view_ptr;
+        let clipboard_list_view_ptr = self.clipboard_list_view_ptr;
         let _close_btn_ptr = self.history_close_btn_ptr;
 
-        // Get history items
+        // Get current data
         let history = get_history_items();
+        let clipboard = get_clipboard_items();
+        let active_tab = get_history_tab_index();
 
         Queue::main().exec_async(move || unsafe {
             let window = history_window_ptr as id;
@@ -239,9 +249,32 @@ impl OverlayHandle {
                 return;
             }
 
-            let scroll_view = history_scroll_view_ptr as id;
-            let list_view = history_list_view_ptr as id;
-            rebuild_history_list_view(scroll_view, list_view, &history, true);
+            let title_label = history_title_ptr as id;
+            let tab_control = history_tab_control_ptr as id;
+            let history_scroll_view = history_scroll_view_ptr as id;
+            let history_list_view = history_list_view_ptr as id;
+            let clipboard_scroll_view = clipboard_scroll_view_ptr as id;
+            let clipboard_list_view = clipboard_list_view_ptr as id;
+
+            rebuild_history_list_view(
+                history_scroll_view,
+                history_list_view,
+                &history,
+                active_tab == 0,
+            );
+            rebuild_clipboard_list_view(
+                clipboard_scroll_view,
+                clipboard_list_view,
+                &clipboard,
+                active_tab == 1,
+            );
+            apply_history_tab_ui(
+                active_tab,
+                tab_control,
+                title_label,
+                history_scroll_view,
+                clipboard_scroll_view,
+            );
 
             // Position history window same side as main overlay
             position_history_window(window, position_top);
@@ -313,11 +346,17 @@ impl OverlayHandle {
 
     fn refresh_history_if_visible(self) {
         let history_window_ptr = self.history_window_ptr;
+        let history_title_ptr = self.history_title_ptr;
+        let history_tab_control_ptr = self.history_tab_control_ptr;
         let history_scroll_view_ptr = self.history_scroll_view_ptr;
         let history_list_view_ptr = self.history_list_view_ptr;
+        let clipboard_scroll_view_ptr = self.clipboard_scroll_view_ptr;
+        let clipboard_list_view_ptr = self.clipboard_list_view_ptr;
 
-        // Get history items
+        // Get latest data
         let history = get_history_items();
+        let clipboard = get_clipboard_items();
+        let active_tab = get_history_tab_index();
 
         Queue::main().exec_async(move || unsafe {
             let window = history_window_ptr as id;
@@ -331,10 +370,32 @@ impl OverlayHandle {
                 return; // Window not visible, no need to refresh
             }
 
-            let scroll_view = history_scroll_view_ptr as id;
-            let list_view = history_list_view_ptr as id;
-            // New history items are inserted at index 0; keep latest entry visible.
-            rebuild_history_list_view(scroll_view, list_view, &history, true);
+            let title_label = history_title_ptr as id;
+            let tab_control = history_tab_control_ptr as id;
+            let history_scroll_view = history_scroll_view_ptr as id;
+            let history_list_view = history_list_view_ptr as id;
+            let clipboard_scroll_view = clipboard_scroll_view_ptr as id;
+            let clipboard_list_view = clipboard_list_view_ptr as id;
+
+            rebuild_history_list_view(
+                history_scroll_view,
+                history_list_view,
+                &history,
+                active_tab == 0,
+            );
+            rebuild_clipboard_list_view(
+                clipboard_scroll_view,
+                clipboard_list_view,
+                &clipboard,
+                active_tab == 1,
+            );
+            apply_history_tab_ui(
+                active_tab,
+                tab_control,
+                title_label,
+                history_scroll_view,
+                clipboard_scroll_view,
+            );
         });
     }
 
@@ -449,8 +510,8 @@ unsafe fn rebuild_history_list_view(scroll_view: id, list_view: id, history: &[S
             let copy_btn = NSButton::initWithFrame_(
                 NSButton::alloc(nil),
                 NSRect::new(
-                    NSPoint::new(text_width + 4.0, row_y + 2.0),
-                    NSSize::new(copy_btn_width, 26.0),
+                    NSPoint::new(text_width + 4.0, row_y + 8.0),
+                    NSSize::new(copy_btn_width, 24.0),
                 ),
             );
             let _: () = msg_send![copy_btn, setBezelStyle: 8usize];
@@ -460,6 +521,129 @@ unsafe fn rebuild_history_list_view(scroll_view: id, list_view: id, history: &[S
             let _: () = msg_send![copy_btn, setTag: i as isize];
             let _: () = msg_send![copy_btn, setTarget: copy_delegate];
             let _: () = msg_send![copy_btn, setAction: sel!(copyHistoryItem:)];
+            let _: () = msg_send![list_view, addSubview: copy_btn];
+        }
+    }
+
+    if scroll_to_top {
+        let clip_view: id = msg_send![scroll_view, contentView];
+        if clip_view != nil {
+            let is_flipped: BOOL = msg_send![list_view, isFlipped];
+            let top_y = if is_flipped == YES {
+                0.0
+            } else {
+                (doc_height - visible_height).max(0.0)
+            };
+            let _: () = msg_send![clip_view, scrollToPoint: NSPoint::new(0.0, top_y)];
+            let _: () = msg_send![scroll_view, reflectScrolledClipView: clip_view];
+        }
+    }
+}
+
+unsafe fn rebuild_clipboard_list_view(
+    scroll_view: id,
+    list_view: id,
+    items: &[ClipboardHistoryItem],
+    scroll_to_top: bool,
+) {
+    if scroll_view == nil || list_view == nil {
+        return;
+    }
+
+    loop {
+        let subviews: id = msg_send![list_view, subviews];
+        let count: usize = msg_send![subviews, count];
+        if count == 0 {
+            break;
+        }
+        let subview: id = msg_send![subviews, objectAtIndex: count - 1];
+        let _: () = msg_send![subview, removeFromSuperview];
+    }
+
+    let scroll_frame: NSRect = msg_send![scroll_view, frame];
+    let visible_height = scroll_frame.size.height.max(CLIPBOARD_ITEM_HEIGHT);
+    let content_width = (scroll_frame.size.width - 4.0).max(120.0);
+    let row_height = CLIPBOARD_ITEM_HEIGHT.max(28.0);
+    let row_count = items.len().max(1);
+    let doc_height = (row_count as f64 * row_height).max(visible_height);
+    let _: () = msg_send![
+        list_view,
+        setFrame: NSRect::new(NSPoint::new(0.0, 0.0), NSSize::new(content_width, doc_height))
+    ];
+
+    if items.is_empty() {
+        let empty_label = NSTextField::initWithFrame_(
+            NSTextField::alloc(nil),
+            NSRect::new(
+                NSPoint::new(2.0, doc_height - row_height + 4.0),
+                NSSize::new(content_width - 4.0, 24.0),
+            ),
+        );
+        let _: () = msg_send![empty_label, setEditable: NO];
+        let _: () = msg_send![empty_label, setSelectable: NO];
+        let _: () = msg_send![empty_label, setBezeled: NO];
+        let _: () = msg_send![empty_label, setBordered: NO];
+        let _: () = msg_send![empty_label, setDrawsBackground: NO];
+        let text_font: id = msg_send![class!(NSFont), systemFontOfSize: 13.0f64];
+        let _: () = msg_send![empty_label, setFont: text_font];
+        let text_color: id =
+            msg_send![class!(NSColor), colorWithCalibratedWhite: 0.72f64 alpha: 1.0f64];
+        let _: () = msg_send![empty_label, setTextColor: text_color];
+        let _: () = msg_send![empty_label, setLineBreakMode: 4usize];
+        let _: () = msg_send![empty_label, setStringValue: ns_string("（无）")];
+        let cell: id = msg_send![empty_label, cell];
+        if cell != nil {
+            let _: () = msg_send![cell, setAlignment: 1usize];
+        }
+        let _: () = msg_send![list_view, addSubview: empty_label];
+    } else {
+        let copy_delegate = create_clipboard_copy_delegate();
+        let copy_btn_width = 32.0;
+        let text_width = (content_width - copy_btn_width - 8.0).max(72.0);
+
+        for (i, item) in items.iter().enumerate() {
+            let row_y = doc_height - ((i as f64 + 1.0) * row_height);
+            let text_label = NSTextField::initWithFrame_(
+                NSTextField::alloc(nil),
+                NSRect::new(
+                    NSPoint::new(0.0, row_y + 4.0),
+                    NSSize::new(text_width, 24.0),
+                ),
+            );
+            let _: () = msg_send![text_label, setEditable: NO];
+            let _: () = msg_send![text_label, setSelectable: YES];
+            let _: () = msg_send![text_label, setBezeled: NO];
+            let _: () = msg_send![text_label, setBordered: NO];
+            let _: () = msg_send![text_label, setDrawsBackground: NO];
+            let text_font: id = msg_send![class!(NSFont), systemFontOfSize: 13.0f64];
+            let _: () = msg_send![text_label, setFont: text_font];
+            let text_color: id = msg_send![class!(NSColor), whiteColor];
+            let _: () = msg_send![text_label, setTextColor: text_color];
+            let _: () = msg_send![text_label, setLineBreakMode: 4usize];
+            let display = match item {
+                ClipboardHistoryItem::Text(text) => truncate(text, 80),
+                ClipboardHistoryItem::Image { data, uti } => {
+                    let kb = (data.len() + 1023) / 1024;
+                    format!("[图片 {} {}KB]", clipboard_uti_label(uti), kb)
+                }
+            };
+            let _: () = msg_send![text_label, setStringValue: ns_string(&display)];
+            let _: () = msg_send![list_view, addSubview: text_label];
+
+            let copy_btn = NSButton::initWithFrame_(
+                NSButton::alloc(nil),
+                NSRect::new(
+                    NSPoint::new(text_width + 4.0, row_y + 8.0),
+                    NSSize::new(copy_btn_width, 24.0),
+                ),
+            );
+            let _: () = msg_send![copy_btn, setBezelStyle: 8usize];
+            let _: () = msg_send![copy_btn, setBordered: YES];
+            let _: () = msg_send![copy_btn, setButtonType: 0usize];
+            set_status_button_symbol(copy_btn, "doc.on.doc");
+            let _: () = msg_send![copy_btn, setTag: i as isize];
+            let _: () = msg_send![copy_btn, setTarget: copy_delegate];
+            let _: () = msg_send![copy_btn, setAction: sel!(copyClipboardItem:)];
             let _: () = msg_send![list_view, addSubview: copy_btn];
         }
     }
