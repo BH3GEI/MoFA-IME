@@ -579,7 +579,7 @@ unsafe fn install_overlay(show_orb: bool) -> Result<OverlayHandle> {
     window.orderOut_(nil);
 
     // Install history window
-    let (history_window, item1, item2, item3, close_btn) = install_history_window()?;
+    let (history_window, history_scroll_view, history_list_view, close_btn) = install_history_window()?;
 
     // Install floating orb (if enabled)
     let orb_window = if show_orb {
@@ -598,9 +598,8 @@ unsafe fn install_overlay(show_orb: bool) -> Result<OverlayHandle> {
         status_label_ptr: status_label as usize,
         preview_label_ptr: preview_label as usize,
         history_window_ptr: history_window as usize,
-        history_item1_ptr: item1 as usize,
-        history_item2_ptr: item2 as usize,
-        history_item3_ptr: item3 as usize,
+        history_scroll_view_ptr: history_scroll_view as usize,
+        history_list_view_ptr: history_list_view as usize,
         history_close_btn_ptr: close_btn as usize,
         orb_window_ptr: orb_window as usize,
     })
@@ -706,9 +705,8 @@ unsafe fn position_history_window(window: id, _main_overlay_on_top: bool) {
     window.setFrameOrigin_(NSPoint::new(final_x, final_y));
 }
 
-// Create the history window with 3 items, copy buttons and close button
-unsafe fn install_history_window() -> Result<(id, id, id, id, id)> {
-    let frame = visible_frame();
+// Create the history window with scrollable history list, copy buttons and close button
+unsafe fn install_history_window() -> Result<(id, id, id, id)> {
     let rect = NSRect::new(
         NSPoint::new(0.0, 0.0),
         NSSize::new(HISTORY_WIDTH, HISTORY_HEIGHT),
@@ -833,59 +831,38 @@ unsafe fn install_history_window() -> Result<(id, id, id, id, id)> {
     let _: () = msg_send![quit_btn, setAction: sel!(quitApp:)];
     content.addSubview_(quit_btn);
 
-    // Create 3 history items
-    let item_width = HISTORY_WIDTH - 24.0;
-    let item_x = 12.0;
-    let copy_btn_width = 32.0;
-    let text_width = item_width - copy_btn_width - 8.0;
-
-    let mut item_ptrs: Vec<id> = Vec::new();
-
-    for i in 0..3 {
-        let y = HISTORY_HEIGHT - 58.0 - (i as f64 * HISTORY_ITEM_HEIGHT);
-
-        // Text label
-        let text_label = NSTextField::initWithFrame_(
-            NSTextField::alloc(nil),
-            NSRect::new(NSPoint::new(item_x, y), NSSize::new(text_width, 24.0)),
-        );
-        let _: () = msg_send![text_label, setEditable: NO];
-        let _: () = msg_send![text_label, setSelectable: YES];
-        let _: () = msg_send![text_label, setBezeled: NO];
-        let _: () = msg_send![text_label, setBordered: NO];
-        let _: () = msg_send![text_label, setDrawsBackground: NO];
-        let text_font: id = msg_send![class!(NSFont), systemFontOfSize: 13.0f64];
-        let _: () = msg_send![text_label, setFont: text_font];
-        let text_color: id = msg_send![class!(NSColor), whiteColor];
-        let _: () = msg_send![text_label, setTextColor: text_color];
-        let _: () = msg_send![text_label, setLineBreakMode: 4usize]; // Truncate tail
-        let _: () = msg_send![text_label, setStringValue: ns_string(&format!("占位文本 {}", i + 1))];
-        content.addSubview_(text_label);
-        item_ptrs.push(text_label);
-
-        // Copy button
-        let copy_btn = NSButton::initWithFrame_(
-            NSButton::alloc(nil),
-            NSRect::new(
-                NSPoint::new(item_x + text_width + 4.0, y - 2.0),
-                NSSize::new(copy_btn_width, 26.0),
-            ),
-        );
-        let _: () = msg_send![copy_btn, setBezelStyle: 8usize]; // NSRoundRectBezelStyle
-        let _: () = msg_send![copy_btn, setBordered: YES];
-        let _: () = msg_send![copy_btn, setButtonType: 0usize]; // NSMomentaryLightButton
-        set_status_button_symbol(copy_btn, "doc.on.doc");
-        // Store index in tag for copy handler
-        let _: () = msg_send![copy_btn, setTag: i as isize];
-        let copy_delegate = create_copy_delegate(i);
-        let _: () = msg_send![copy_btn, setTarget: copy_delegate];
-        let _: () = msg_send![copy_btn, setAction: sel!(copyHistoryItem:)];
-        content.addSubview_(copy_btn);
+    // Scrollable history list area
+    let list_x = 12.0;
+    let list_y = 8.0;
+    let list_width = HISTORY_WIDTH - 24.0;
+    let list_height = HISTORY_HEIGHT - 42.0;
+    let scroll_view_alloc: id = msg_send![class!(NSScrollView), alloc];
+    let scroll_view: id = msg_send![
+        scroll_view_alloc,
+        initWithFrame: NSRect::new(NSPoint::new(list_x, list_y), NSSize::new(list_width, list_height))
+    ];
+    if scroll_view == nil {
+        bail!("无法创建历史滚动区域");
     }
+    let _: () = msg_send![scroll_view, setHasVerticalScroller: YES];
+    let _: () = msg_send![scroll_view, setHasHorizontalScroller: NO];
+    let _: () = msg_send![scroll_view, setAutohidesScrollers: YES];
+    let _: () = msg_send![scroll_view, setBorderType: 0usize];
+    let _: () = msg_send![scroll_view, setDrawsBackground: NO];
+
+    let list_view = NSView::initWithFrame_(
+        NSView::alloc(nil),
+        NSRect::new(NSPoint::new(0.0, 0.0), NSSize::new(list_width - 4.0, list_height)),
+    );
+    if list_view == nil {
+        bail!("无法创建历史列表视图");
+    }
+    let _: () = msg_send![scroll_view, setDocumentView: list_view];
+    content.addSubview_(scroll_view);
 
     window.orderOut_(nil);
 
-    Ok((window, item_ptrs[0], item_ptrs[1], item_ptrs[2], close_btn))
+    Ok((window, scroll_view, list_view, close_btn))
 }
 
 // Create floating orb window (常驻悬浮球)
@@ -1172,24 +1149,29 @@ pub fn set_orb_click_handler(tx: std::sync::mpsc::Sender<OrbCommand>) {
 }
 
 // Create delegate for copy buttons
-fn create_copy_delegate(index: usize) -> id {
+fn create_copy_delegate() -> id {
     use objc::declare::ClassDecl;
     use std::sync::Once;
 
     static mut CLASS: *const objc::runtime::Class = std::ptr::null();
+    static mut DELEGATE: id = nil;
     static INIT: Once = Once::new();
 
     INIT.call_once(|| {
         let superclass = objc::runtime::Class::get("NSObject").unwrap();
         let mut decl = ClassDecl::new("HistoryCopyDelegate", superclass).unwrap();
 
-        decl.add_ivar::<usize>("item_index");
-
-        extern "C" fn copy_item(this: &mut Object, _sel: Sel, _sender: id) {
+        extern "C" fn copy_item(_this: &mut Object, _sel: Sel, sender: id) {
             unsafe {
-                let index: usize = *this.get_ivar("item_index");
+                if sender == nil {
+                    return;
+                }
+                let index: isize = msg_send![sender, tag];
+                if index < 0 {
+                    return;
+                }
                 let items = get_history_items();
-                if let Some(text) = items.get(index) {
+                if let Some(text) = items.get(index as usize) {
                     // Copy to clipboard
                     let pasteboard: id = msg_send![class!(NSPasteboard), generalPasteboard];
                     let _: () = msg_send![pasteboard, clearContents];
@@ -1207,16 +1189,14 @@ fn create_copy_delegate(index: usize) -> id {
         }
 
         let class = decl.register();
-        unsafe { CLASS = class; }
+        unsafe {
+            CLASS = class;
+            let delegate: id = msg_send![class, new];
+            DELEGATE = delegate;
+        }
     });
 
-    unsafe {
-        let class = &*CLASS;
-        let delegate: id = msg_send![class, alloc];
-        let delegate: id = msg_send![delegate, init];
-        (*delegate).set_ivar("item_index", index);
-        delegate
-    }
+    unsafe { DELEGATE }
 }
 
 // Create delegate for quit button

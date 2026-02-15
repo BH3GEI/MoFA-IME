@@ -93,9 +93,8 @@ struct OverlayHandle {
     preview_label_ptr: usize,
     // History window
     history_window_ptr: usize,
-    history_item1_ptr: usize,
-    history_item2_ptr: usize,
-    history_item3_ptr: usize,
+    history_scroll_view_ptr: usize,
+    history_list_view_ptr: usize,
     history_close_btn_ptr: usize,
     // Floating orb (常驻悬浮球)
     orb_window_ptr: usize,
@@ -227,9 +226,8 @@ impl OverlayHandle {
 
     fn show_history_internal(self, position_top: bool, auto_hide: bool) {
         let history_window_ptr = self.history_window_ptr;
-        let item1_ptr = self.history_item1_ptr;
-        let item2_ptr = self.history_item2_ptr;
-        let item3_ptr = self.history_item3_ptr;
+        let history_scroll_view_ptr = self.history_scroll_view_ptr;
+        let history_list_view_ptr = self.history_list_view_ptr;
         let _close_btn_ptr = self.history_close_btn_ptr;
 
         // Get history items
@@ -241,27 +239,9 @@ impl OverlayHandle {
                 return;
             }
 
-            // Update text with real history data
-            let item1 = item1_ptr as id;
-            let item2 = item2_ptr as id;
-            let item3 = item3_ptr as id;
-
-            let text1 = history.get(0).map(|s| s.as_str()).unwrap_or("");
-            let text2 = history.get(1).map(|s| s.as_str()).unwrap_or("");
-            let text3 = history.get(2).map(|s| s.as_str()).unwrap_or("");
-
-            if item1 != nil {
-                let display = if text1.is_empty() { "（无）" } else { text1 };
-                let _: () = msg_send![item1, setStringValue: ns_string(&truncate(display, 20))];
-            }
-            if item2 != nil {
-                let display = if text2.is_empty() { "（无）" } else { text2 };
-                let _: () = msg_send![item2, setStringValue: ns_string(&truncate(display, 20))];
-            }
-            if item3 != nil {
-                let display = if text3.is_empty() { "（无）" } else { text3 };
-                let _: () = msg_send![item3, setStringValue: ns_string(&truncate(display, 20))];
-            }
+            let scroll_view = history_scroll_view_ptr as id;
+            let list_view = history_list_view_ptr as id;
+            rebuild_history_list_view(scroll_view, list_view, &history, true);
 
             // Position history window same side as main overlay
             position_history_window(window, position_top);
@@ -333,9 +313,8 @@ impl OverlayHandle {
 
     fn refresh_history_if_visible(self) {
         let history_window_ptr = self.history_window_ptr;
-        let item1_ptr = self.history_item1_ptr;
-        let item2_ptr = self.history_item2_ptr;
-        let item3_ptr = self.history_item3_ptr;
+        let history_scroll_view_ptr = self.history_scroll_view_ptr;
+        let history_list_view_ptr = self.history_list_view_ptr;
 
         // Get history items
         let history = get_history_items();
@@ -352,27 +331,10 @@ impl OverlayHandle {
                 return; // Window not visible, no need to refresh
             }
 
-            // Update text with real history data
-            let item1 = item1_ptr as id;
-            let item2 = item2_ptr as id;
-            let item3 = item3_ptr as id;
-
-            let text1 = history.get(0).map(|s| s.as_str()).unwrap_or("");
-            let text2 = history.get(1).map(|s| s.as_str()).unwrap_or("");
-            let text3 = history.get(2).map(|s| s.as_str()).unwrap_or("");
-
-            if item1 != nil {
-                let display = if text1.is_empty() { "（无）" } else { text1 };
-                let _: () = msg_send![item1, setStringValue: ns_string(&truncate(display, 20))];
-            }
-            if item2 != nil {
-                let display = if text2.is_empty() { "（无）" } else { text2 };
-                let _: () = msg_send![item2, setStringValue: ns_string(&truncate(display, 20))];
-            }
-            if item3 != nil {
-                let display = if text3.is_empty() { "（无）" } else { text3 };
-                let _: () = msg_send![item3, setStringValue: ns_string(&truncate(display, 20))];
-            }
+            let scroll_view = history_scroll_view_ptr as id;
+            let list_view = history_list_view_ptr as id;
+            // New history items are inserted at index 0; keep latest entry visible.
+            rebuild_history_list_view(scroll_view, list_view, &history, true);
         });
     }
 
@@ -405,6 +367,115 @@ impl OverlayHandle {
                 window.orderOut_(nil);
             }
         });
+    }
+}
+
+unsafe fn rebuild_history_list_view(scroll_view: id, list_view: id, history: &[String], scroll_to_top: bool) {
+    if scroll_view == nil || list_view == nil {
+        return;
+    }
+
+    // Clear existing rows.
+    // `subviews` may be a snapshot-like array; remove from the end to avoid stale index reuse.
+    loop {
+        let subviews: id = msg_send![list_view, subviews];
+        let count: usize = msg_send![subviews, count];
+        if count == 0 {
+            break;
+        }
+        let subview: id = msg_send![subviews, objectAtIndex: count - 1];
+        let _: () = msg_send![subview, removeFromSuperview];
+    }
+
+    let scroll_frame: NSRect = msg_send![scroll_view, frame];
+    let visible_height = scroll_frame.size.height.max(HISTORY_ITEM_HEIGHT);
+    let content_width = (scroll_frame.size.width - 4.0).max(120.0);
+    let row_height = HISTORY_ITEM_HEIGHT.max(28.0);
+    let row_count = history.len().max(1);
+    let doc_height = (row_count as f64 * row_height).max(visible_height);
+    let _: () = msg_send![
+        list_view,
+        setFrame: NSRect::new(NSPoint::new(0.0, 0.0), NSSize::new(content_width, doc_height))
+    ];
+
+    if history.is_empty() {
+        let empty_label = NSTextField::initWithFrame_(
+            NSTextField::alloc(nil),
+            NSRect::new(
+                NSPoint::new(2.0, doc_height - row_height + 4.0),
+                NSSize::new(content_width - 4.0, 24.0),
+            ),
+        );
+        let _: () = msg_send![empty_label, setEditable: NO];
+        let _: () = msg_send![empty_label, setSelectable: NO];
+        let _: () = msg_send![empty_label, setBezeled: NO];
+        let _: () = msg_send![empty_label, setBordered: NO];
+        let _: () = msg_send![empty_label, setDrawsBackground: NO];
+        let text_font: id = msg_send![class!(NSFont), systemFontOfSize: 13.0f64];
+        let _: () = msg_send![empty_label, setFont: text_font];
+        let text_color: id = msg_send![class!(NSColor), colorWithCalibratedWhite: 0.72f64 alpha: 1.0f64];
+        let _: () = msg_send![empty_label, setTextColor: text_color];
+        let _: () = msg_send![empty_label, setLineBreakMode: 4usize];
+        let _: () = msg_send![empty_label, setStringValue: ns_string("（无）")];
+        let cell: id = msg_send![empty_label, cell];
+        if cell != nil {
+            let _: () = msg_send![cell, setAlignment: 1usize];
+        }
+        let _: () = msg_send![list_view, addSubview: empty_label];
+    } else {
+        let copy_delegate = create_copy_delegate();
+        let copy_btn_width = 32.0;
+        let text_width = (content_width - copy_btn_width - 8.0).max(72.0);
+
+        for (i, text) in history.iter().enumerate() {
+            let row_y = doc_height - ((i as f64 + 1.0) * row_height);
+            let text_label = NSTextField::initWithFrame_(
+                NSTextField::alloc(nil),
+                NSRect::new(NSPoint::new(0.0, row_y + 4.0), NSSize::new(text_width, 24.0)),
+            );
+            let _: () = msg_send![text_label, setEditable: NO];
+            let _: () = msg_send![text_label, setSelectable: YES];
+            let _: () = msg_send![text_label, setBezeled: NO];
+            let _: () = msg_send![text_label, setBordered: NO];
+            let _: () = msg_send![text_label, setDrawsBackground: NO];
+            let text_font: id = msg_send![class!(NSFont), systemFontOfSize: 13.0f64];
+            let _: () = msg_send![text_label, setFont: text_font];
+            let text_color: id = msg_send![class!(NSColor), whiteColor];
+            let _: () = msg_send![text_label, setTextColor: text_color];
+            let _: () = msg_send![text_label, setLineBreakMode: 4usize];
+            let _: () = msg_send![text_label, setStringValue: ns_string(&truncate(text, 80))];
+            let _: () = msg_send![list_view, addSubview: text_label];
+
+            let copy_btn = NSButton::initWithFrame_(
+                NSButton::alloc(nil),
+                NSRect::new(
+                    NSPoint::new(text_width + 4.0, row_y + 2.0),
+                    NSSize::new(copy_btn_width, 26.0),
+                ),
+            );
+            let _: () = msg_send![copy_btn, setBezelStyle: 8usize];
+            let _: () = msg_send![copy_btn, setBordered: YES];
+            let _: () = msg_send![copy_btn, setButtonType: 0usize];
+            set_status_button_symbol(copy_btn, "doc.on.doc");
+            let _: () = msg_send![copy_btn, setTag: i as isize];
+            let _: () = msg_send![copy_btn, setTarget: copy_delegate];
+            let _: () = msg_send![copy_btn, setAction: sel!(copyHistoryItem:)];
+            let _: () = msg_send![list_view, addSubview: copy_btn];
+        }
+    }
+
+    if scroll_to_top {
+        let clip_view: id = msg_send![scroll_view, contentView];
+        if clip_view != nil {
+            let is_flipped: BOOL = msg_send![list_view, isFlipped];
+            let top_y = if is_flipped == YES {
+                0.0
+            } else {
+                (doc_height - visible_height).max(0.0)
+            };
+            let _: () = msg_send![clip_view, scrollToPoint: NSPoint::new(0.0, top_y)];
+            let _: () = msg_send![scroll_view, reflectScrolledClipView: clip_view];
+        }
     }
 }
 
