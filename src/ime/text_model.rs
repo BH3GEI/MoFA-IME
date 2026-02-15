@@ -79,78 +79,6 @@ fn normalize_transcript(text: &str) -> String {
     out.trim().to_string()
 }
 
-fn compact_for_filter(text: &str) -> String {
-    text.chars()
-        .filter(|c| {
-            if c.is_whitespace() {
-                return false;
-            }
-            !matches!(
-                c,
-                '，' | '。'
-                    | '！'
-                    | '？'
-                    | '；'
-                    | '：'
-                    | '、'
-                    | '（'
-                    | '）'
-                    | '【'
-                    | '】'
-                    | '.'
-                    | ','
-                    | '!'
-                    | '?'
-                    | ';'
-                    | ':'
-                    | '('
-                    | ')'
-                    | '['
-                    | ']'
-                    | '"'
-                    | '\''
-                    | '“'
-                    | '”'
-                    | '…'
-            )
-        })
-        .collect::<String>()
-        .to_ascii_lowercase()
-}
-
-fn is_template_noise_text(text: &str) -> bool {
-    let compact = compact_for_filter(text);
-    if compact.is_empty() {
-        return true;
-    }
-    const PATTERNS: [&str; 11] = [
-        "好的请提供需要转写和润色的语音内容",
-        "请提供需要转写和润色的语音内容",
-        "请提供需要转写的语音内容",
-        "请提供语音内容",
-        "未检测到有效语音",
-        "未识别到有效语音",
-        "未识别到语音",
-        "pleaseprovidevoiceinput",
-        "pleaseprovidetheaudiocontent",
-        "pleaseprovidevoicetotranscribe",
-        "novalidaudio",
-    ];
-    PATTERNS.iter().any(|p| compact.contains(p))
-}
-
-fn should_drop_transcript(text: &str) -> bool {
-    let normalized = normalize_transcript(text);
-    if normalized.is_empty() {
-        return true;
-    }
-    if is_template_noise_text(&normalized) {
-        return true;
-    }
-    let compact = compact_for_filter(&normalized);
-    compact.chars().count() <= 1
-}
-
 fn audio_rms(samples: &[f32]) -> f32 {
     if samples.is_empty() {
         return 0.0;
@@ -166,51 +94,19 @@ fn audio_rms(samples: &[f32]) -> f32 {
     mean_square.sqrt() as f32
 }
 
-fn english_char_ratio(text: &str) -> f32 {
-    let mut latin = 0usize;
-    let mut total = 0usize;
-    for ch in text.chars() {
-        if ch.is_ascii_alphabetic() {
-            latin += 1;
-            total += 1;
-        } else if ('\u{4e00}'..='\u{9fff}').contains(&ch) {
-            total += 1;
-        }
-    }
-    if total == 0 {
-        0.0
-    } else {
-        latin as f32 / total as f32
-    }
-}
-
 fn build_refine_prompt(raw_text: &str) -> String {
-    if english_char_ratio(raw_text) >= 0.7 {
-        format!(
-            "You are an input-method text polisher. Rewrite the ASR text into natural, concise English ready to send.\n\
-Rules:\n\
-1) Keep the original meaning and key facts.\n\
-2) Remove fillers, stutters, and duplicate fragments.\n\
-3) Keep names, numbers, code terms, and URLs unchanged.\n\
-4) Do not translate into Chinese.\n\
-5) Do not explain, do not add commentary, and do not ask follow-up questions.\n\
-6) If content is empty/invalid, output an empty string.\n\
-Output only the final text.\n\n{}",
-            raw_text
-        )
-    } else {
-        format!(
-            "你是输入法润色器。将 ASR 文本整理为可直接发送的自然中文。\n\
+    format!(
+        "你是输入法润色器。将 ASR 文本整理为可直接发送的自然表达。\n\
 规则：\n\
 1) 保留原意与事实，不新增信息；\n\
-2) 删除口癖、重复、卡顿；\n\
+2) 删除重复、卡顿与明显口癖；\n\
 3) 专名、数字、代码、URL 原样保留；\n\
-4) 不解释、不寒暄、不提问；\n\
-5) 若内容为空或无效，仅输出空字符串；\n\
-6) 只输出最终文本。\n\n{}",
-            raw_text
-        )
-    }
+4) 保持原文主要语言，不要主动翻译；\n\
+5) 短语或语气词（如“嗯”“啊”“好”）若承载语义则保留；\n\
+6) 若内容确为空，输出空字符串；\n\
+7) 只输出最终文本，不解释、不提问。\n\n{}",
+        raw_text
+    )
 }
 
 fn total_memory_gb() -> Option<u64> {

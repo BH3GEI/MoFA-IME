@@ -1,6 +1,5 @@
 use std::ffi::{c_char, c_float, c_int, c_void, CStr, CString};
 use std::path::Path;
-use std::sync::Arc;
 
 pub struct LlmEngine {
     ctx: *mut c_void,
@@ -20,7 +19,6 @@ extern "C" {
                            callback: extern "C" fn(*const c_char, *mut c_void), user_data: *mut c_void);
     fn llm_free_string(s: *mut c_char);
 
-    fn llm_kv_clear(ctx: *mut c_void);
     fn llm_kv_count(ctx: *mut c_void) -> c_int;
 
     fn llm_chat_add_user(ctx: *mut c_void, message: *const c_char);

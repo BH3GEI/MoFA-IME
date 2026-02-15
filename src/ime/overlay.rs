@@ -17,7 +17,7 @@ const ASR_PREVIEW_HOLD_MS: u64 = 900;
 const RESULT_OVERLAY_HOLD_MS: u64 = 950;
 const OVERLAY_FADE_TOTAL_MS: u64 = 120;
 const OVERLAY_FADE_STEPS: u64 = 4;
-const SILENCE_RMS_THRESHOLD: f32 = 0.0035;
+const SILENCE_RMS_THRESHOLD: f32 = 0.0015;
 
 // History window constants
 const HISTORY_WIDTH: f64 = 280.0;

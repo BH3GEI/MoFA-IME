@@ -76,52 +76,6 @@ impl HotkeySpec {
         Some(Self { keycode, modifiers })
     }
 
-    fn token(self) -> String {
-        if self.is_fn() {
-            return "fn".to_string();
-        }
-
-        let mut parts: Vec<String> = Vec::new();
-        if self.modifiers & HOTKEY_MOD_CMD != 0 {
-            parts.push("cmd".to_string());
-        }
-        if self.modifiers & HOTKEY_MOD_CTRL != 0 {
-            parts.push("ctrl".to_string());
-        }
-        if self.modifiers & HOTKEY_MOD_ALT != 0 {
-            parts.push("alt".to_string());
-        }
-        if self.modifiers & HOTKEY_MOD_SHIFT != 0 {
-            parts.push("shift".to_string());
-        }
-        parts.push(hotkey_code_to_token(self.keycode));
-        parts.join("+")
-    }
-
-    fn label(self) -> String {
-        if self.is_fn() {
-            return "Fn".to_string();
-        }
-        let mut parts: Vec<&str> = Vec::new();
-        if self.modifiers & HOTKEY_MOD_CMD != 0 {
-            parts.push("Cmd");
-        }
-        if self.modifiers & HOTKEY_MOD_CTRL != 0 {
-            parts.push("Ctrl");
-        }
-        if self.modifiers & HOTKEY_MOD_ALT != 0 {
-            parts.push("Alt");
-        }
-        if self.modifiers & HOTKEY_MOD_SHIFT != 0 {
-            parts.push("Shift");
-        }
-        let key = hotkey_code_to_label(self.keycode);
-        if parts.is_empty() {
-            key
-        } else {
-            format!("{}+{}", parts.join("+"), key)
-        }
-    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -344,86 +298,6 @@ fn hotkey_code_from_token(token: &str) -> Option<u16> {
         _ => return None,
     };
     Some(code)
-}
-
-fn hotkey_code_to_label(code: u16) -> String {
-    if code == HOTKEY_FN_CODE {
-        return "Fn".to_string();
-    }
-    let label = match code {
-        0 => "A",
-        1 => "S",
-        2 => "D",
-        3 => "F",
-        4 => "H",
-        5 => "G",
-        6 => "Z",
-        7 => "X",
-        8 => "C",
-        9 => "V",
-        11 => "B",
-        12 => "Q",
-        13 => "W",
-        14 => "E",
-        15 => "R",
-        16 => "Y",
-        17 => "T",
-        18 => "1",
-        19 => "2",
-        20 => "3",
-        21 => "4",
-        22 => "6",
-        23 => "5",
-        24 => "=",
-        25 => "9",
-        26 => "7",
-        27 => "-",
-        28 => "8",
-        29 => "0",
-        36 => "Return",
-        48 => "Tab",
-        49 => "Space",
-        51 => "Delete",
-        53 => "Esc",
-        96 => "F5",
-        97 => "F6",
-        98 => "F7",
-        99 => "F3",
-        100 => "F8",
-        101 => "F9",
-        103 => "F11",
-        109 => "F10",
-        111 => "F12",
-        118 => "F4",
-        120 => "F2",
-        122 => "F1",
-        _ => return format!("Keycode {}", code),
-    };
-    label.to_string()
-}
-
-fn hotkey_code_to_token(code: u16) -> String {
-    if code == HOTKEY_FN_CODE {
-        return "fn".to_string();
-    }
-    let token = match code {
-        24 => "=".to_string(),
-        27 => "-".to_string(),
-        36 => "return".to_string(),
-        48 => "tab".to_string(),
-        49 => "space".to_string(),
-        51 => "delete".to_string(),
-        53 => "esc".to_string(),
-        _ => {
-            let label = hotkey_code_to_label(code);
-            if label.starts_with("Keycode ") {
-                format!("keycode:{code}")
-            } else {
-                label.to_ascii_lowercase()
-            }
-        }
-    };
-    token
 }
 
 fn hotkey_config_path() -> PathBuf {
